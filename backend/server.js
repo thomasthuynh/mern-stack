@@ -1,20 +1,32 @@
 require("dotenv").config();
-const express = require("express");
 
-// Express app
+const express = require("express");
+const mongoose = require("mongoose");
+const workoutRoutes = require("./routes/workouts");
+
+// EXPRESS APP
 const app = express();
+
+// MIDDLEWARE
+app.use(express.json()); // Looks to see if requests sent to the server have a body
 
 app.use((req, res, next) => {
   console.log(req.path, req.method);
   next();
 });
 
-// Routes
-app.get("/", (req, res) => {
-  res.json({ msg: "Welcome to the app" });
-});
+// ROUTES
+app.use("/api/workouts", workoutRoutes);
 
-// Listen for requests
-app.listen(process.env.PORT, () => {
-  console.log("Listening on port", process.env.PORT);
-});
+// CONNECT TO DB
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => {
+    // LISTEN FOR REQEUSTS
+    app.listen(process.env.PORT, () => {
+      console.log("Connected to database. Listening on port", process.env.PORT);
+    });
+  })
+  .catch((err) => {
+    console.log(err);
+  });
