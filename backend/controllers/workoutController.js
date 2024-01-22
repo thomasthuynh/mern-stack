@@ -27,6 +27,10 @@ const getWorkout = async (req, res) => {
 // POST a new workout
 const createWorkout = async (req, res) => {
   const { title, load, reps } = req.body;
+  // Short hand notation for 
+  // const title = req.body.title
+  // const load = req.body.load
+  // const reps = req.body.reps
 
   // Add doc to DB
   try {
